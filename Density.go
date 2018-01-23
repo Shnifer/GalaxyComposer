@@ -119,12 +119,12 @@ func Dens(x, y int) byte {
 	radk:=1-rad
 	//angle beams
 	deg:=getDeg(x,y)
-	r1:=Whirl(deg,45,40, rad, 270)
-	r2:=Whirl(deg,-45,40, rad, 270)
-	r3:=Whirl(deg,135,40, rad, 270)
-	r4:=Whirl(deg,-135,40, rad, 270)
-	c:=Core(rad)
-	fon:=0.2
+	r1:=Whirl(deg,45,30, rad, 270)
+	r2:=Whirl(deg,-45,30, rad, 270)
+	r3:=Whirl(deg,135,30, rad, 270)
+	r4:=Whirl(deg,-135,30, rad, 270)
+	c:=Core(rad)*0.8
+	fon:=0.1
 
 	r:=max(r1,r2,r3,r4,c,fon)
 
