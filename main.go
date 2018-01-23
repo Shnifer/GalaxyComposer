@@ -34,6 +34,7 @@ func main() {
 	for x := -HalfImageSize; x < HalfImageSize; x++ {
 		for y := -HalfImageSize; y < HalfImageSize; y++ {
 			d := Dens(x, y)
+
 			img.Set(x, y, color.NRGBA{
 				R: 0, G: 0, B: d, A: 255,
 			})
