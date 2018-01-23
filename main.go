@@ -2,41 +2,49 @@ package main
 
 import (
 	"image"
-	"image/png"
 	"image/color"
-	"os"
+	"image/draw"
+	"image/png"
 	"log"
 	"math/rand"
+	"os"
 	"time"
+	"fmt"
 )
 
-const GalaxyRadius = 50000 //in light years
+const GalaxyRadius = 500  //in light years
 const HalfImageSize = 500 //in pixels, better even
 
-
-
-func main(){
+func main() {
 
 	rand.Seed(time.Now().Unix())
+	RPG:=CreateRandomPointGenerator(Dens)
 
-	stars := make([]image.Point,1000)
+	stars := make([]image.Point, 2000)
 
-	for i,_:=range stars{
-		stars[i].X = rand.Intn(HalfImageSize*2)-HalfImageSize
-		stars[i].Y = rand.Intn(HalfImageSize*2)-HalfImageSize
+	for i, _ := range stars {
+		stars[i]=RPG()
 	}
 
-	r:=image.Rect(-HalfImageSize,-HalfImageSize,HalfImageSize,HalfImageSize)
-	img:=image.NewRGBA(r)
+	r := image.Rect(-HalfImageSize, -HalfImageSize, HalfImageSize, HalfImageSize)
+	img := image.NewRGBA(r)
+	c := color.Black
+	draw.Draw(img, r, &image.Uniform{c}, image.ZP, draw.Src)
 
-	for _,star:=range stars {
-		x:=star.X
-		y:=star.Y
+	for x := -HalfImageSize; x < HalfImageSize; x++ {
+		for y := -HalfImageSize; y < HalfImageSize; y++ {
+			d := Dens(x, y)
+			img.Set(x, y, color.NRGBA{
+				R: 0, G: 0, B: d, A: 255,
+			})
+		}
+	}
+
+	for _, star := range stars {
+		x := star.X
+		y := star.Y
 		img.Set(x, y, color.NRGBA{
-			R: uint8((x + y) & 255),
-			G: uint8((x + y) << 1 & 255),
-			B: uint8((x + y) << 2 & 255),
-			A: 255,
+			R: 255, G: 255, B: 0, A: 255,
 		})
 	}
 
@@ -52,5 +60,12 @@ func main(){
 
 	if err := f.Close(); err != nil {
 		log.Fatal(err)
+	}
+}
+
+func timer(caption string) func() {
+	start:=time.Now()
+	return func() {
+		fmt.Println(caption, time.Now().Sub(start))
 	}
 }
